@@ -62,6 +62,14 @@ int main(int argc, char *argv[])
 			g_files.emplace(path, fi);
 		}
 	}
+
+	cout << endl;
+
+	for(auto const& info: g_files) {
+		RegularFileInfo *fi(dynamic_cast<RegularFileInfo*>(info.second.get()));
+		if(fi)
+			cout << info.first << ": " << fi->GetLength() << ", " << fi->GetCrc() << endl;
+	}
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;
 }

@@ -22,8 +22,8 @@ struct RegularFileInfo : public FileInfo
 {
 	RegularFileInfo(std::string const &path);
 	virtual bool operator==(FileInfo const &other);
-	std::streampos GetLength() { return m_length; }
-	uint32_t GetCrc() { return m_crc; }
+	std::streampos GetLength() const { return m_length; }
+	uint32_t GetCrc() const { return m_crc; }
 private:
 	std::streampos	m_length;
 	uint32_t		m_crc;

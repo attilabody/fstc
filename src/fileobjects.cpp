@@ -34,7 +34,5 @@ RegularFileInfo::RegularFileInfo(string const &path)
 bool RegularFileInfo::operator==(const FileInfo &other)
 {
 	RegularFileInfo const *_other(dynamic_cast<RegularFileInfo const *>(&other));
-	if(_other != nullptr)
-		return m_crc == _other->m_crc && m_length == _other->m_length;
-	return false;
+	return _other && m_crc == _other->m_crc && m_length == _other->m_length;
 }
