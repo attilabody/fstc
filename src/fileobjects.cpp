@@ -11,9 +11,12 @@
 #include "fileobjects.h"
 #include "crc32.h"
 
-using namespace std;
 
-RegularFileInfo::RegularFileInfo(string const &path)
+using namespace std;
+namespace fs = std::experimental::filesystem;
+
+RegularFileInfo::RegularFileInfo(fs::path const &path)
+: FileInfo(path)
 {
 	ifstream f(path.c_str(), ios::binary | ios::ate);
 	m_length = f.tellg();
@@ -34,5 +37,22 @@ RegularFileInfo::RegularFileInfo(string const &path)
 bool RegularFileInfo::operator==(const FileInfo &other)
 {
 	RegularFileInfo const *_other(dynamic_cast<RegularFileInfo const *>(&other));
-	return _other && m_crc == _other->m_crc && m_length == _other->m_length;
+	return _other
+		&& m_status.permissions() == _other->m_status.permissions()
+		&& m_crc == _other->m_crc
+		&& m_length == _other->m_length;
+}
+
+SymLinkInfo::SymLinkInfo(fs::path const &path)
+: FileInfo(path)
+, m_target( fs::read_symlink(path))
+{
+}
+
+bool SymLinkInfo::operator==(const FileInfo &other)
+{
+	SymLinkInfo const *_other(dynamic_cast<SymLinkInfo const *>(&other));
+	return _other
+		&& m_status.permissions() == _other->m_status.permissions()
+		&& m_target == _other->m_target;
 }
